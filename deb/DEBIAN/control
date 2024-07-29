@@ -1,0 +1,5 @@
+Package: mrhat-battery
+Version: 0.1.0
+Maintainer: Effective Range Kft.
+Architecture: all
+Description: Device tree overlay for defining a 4.2V max charge voltage LiIon simple-battery to be used with the bq2562x_charger driver and to be managed by the BQ25622 BMS IC on the MrHATv1 HW

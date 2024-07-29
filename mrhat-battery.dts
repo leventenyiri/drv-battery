@@ -1,0 +1,96 @@
+/*
+* Copyright (C) 2024 Effective Range Kft.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License version 2 as
+* published by the Free Software Foundation.
+*/
+/dts-v1/;
+/plugin/;
+
+
+/ {
+    compatible = "brcm,bcm2835";
+    fragment@0{
+        target-path = "/";
+        __overlay__ {
+            status = "okay";
+            BAT1: battery {
+                compatible = "simple-battery";
+                device-chemistry = "lithium-ion";
+                constant-charge-current-max-microamp = <1040000>;
+                constant-charge-voltage-max-microvolt = <4200000>;
+                precharge-current-microamp = <100000>;
+                charge-term-current-microamp = <60000>;
+                charge-full-design-microamp-hours = <5000000>;
+                factory-internal-resistance-micro-ohms = <100000>;
+                ocv-capacity-celsius = <250>;
+                ocv-capacity-table-0 = 
+                	    <4178000 100>,
+                        <4148000 99>,
+                        <4105000 95>,
+                        <4078000 92>,
+                        <4057000 89>,
+                        <4013000 85>,
+                        <3988000 82>,
+                        <3962000 77>,
+                        <3920000 70>,
+                        <3891000 65>,
+                        <3874000 62>,
+                        <3839000 59>,
+                        <3816000 55>,
+                        <3798000 50>,
+                        <3778000 40>,
+                        <3764000 30>,
+                        <3743000 25>,
+                        <3711000 20>,
+                        <3691000 18>,
+                        <3685000 15>,
+                        <3680000 12>,
+                        <3662000 10>,
+                        <3638000 9>,
+                        <3593000 7>,
+                        <3566000 6>,
+                        <3497000 4>,
+                        <3405000 2>,
+                        <3352000 1>,
+                        <3300000 0>;
+                resistance-temp-table = 
+                     <500 45>,
+                     <400 50>,
+                     <350 60>,
+                     <150 100>,
+                     <100 150>,
+                     < 0  200>;
+            };
+        };
+    };
+
+    fragment@1{
+        target-path = "/";
+        __overlay__ {
+            status = "okay";
+            aliases {
+                BAT1 = <&BAT1>;
+            };
+        };
+    };
+    
+    fragment@2{
+        target-path = "/";
+        __overlay__ {
+            status = "okay";
+            __symbols__ {
+                BAT1 = "/battery";
+            };
+        };
+    };
+
+    __overrides__ {
+        max_charge_uA = <&BAT1>, "constant-charge-current-max-microamp:0";
+        pre_charge_uA = <&BAT1>, "precharge-current-microamp:0";
+        charge_term_uA = <&BAT1>, "charge-term-current-microamp:0";
+        bat_capacity_uAh = <&BAT1>, "charge-full-design-microamp-hours:0";
+        r_int_uohms = <&BAT1>, "factory-internal-resistance-micro-ohms:0";
+    };
+};
