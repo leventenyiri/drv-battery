@@ -8,7 +8,7 @@
 /dts-v1/;
 /plugin/;
 
-
+/* Reference values taken from  EB535151VU  /drivers/power/supply/samsung-sdi-battery.c */
 / {
     compatible = "brcm,bcm2835";
     fragment@0{
@@ -17,13 +17,56 @@
             status = "okay";
             BAT1: battery {
                 compatible = "simple-battery";
-                device-chemistry = "lithium-ion";
                 constant-charge-current-max-microamp = <1040000>;
                 constant-charge-voltage-max-microvolt = <4200000>;
                 precharge-current-microamp = <100000>;
                 charge-term-current-microamp = <60000>;
                 charge-full-design-microamp-hours = <5000000>;
+                device-chemistry = "lithium-ion";
                 factory-internal-resistance-micro-ohms = <100000>;
+                factory-internal-resistance-charging-micro-ohms = <400000>;
+                /* Voltage [uV] Resistance [uOhm]     */        
+                vbat-to-internal-resistance-discharging-table = 
+                    < 4071000  100000 >,
+                    < 4019000  118354 >,
+                    < 3951000  120886 >,
+                    < 3901000  122151 >,
+                    < 3850000  172784 >,
+                    < 3800000  193037 >,
+                    < 3750000  129746 >,
+                    < 3700000  183544 >,
+                    < 3650000  165822 >,
+                    < 3618000  183544 >,
+                    < 3505000  148734 >,
+                    < 3484000  160126 >,
+                    < 3413000  153797 >,
+                    < 3393000  180379 >,
+                    < 3361000  177848 >,
+                    < 3302000  181012 >,
+                    < 3280000  158227 >;
+                /* Voltage [uV] Resistance [uOhm]     */        
+                vbat-to-internal-resistance-charging-table =
+                	<4190000 400000>,
+                    <4159000 471028>,
+                    <4121000 457943>,
+                    <4069000 426168>,
+                    <4046000 428037>,
+                    <4026000 435514>,
+                    <4007000 448598>,
+                    <3982000 543925>,
+                    <3945000 515887>,
+                    <3924000 497196>,
+                    <3910000 482242>,
+                    <3900000 506542>,
+                    <3844000 521495>,
+                    <3772000 405607>,
+                    <3673000 388785>,
+                    <3571000 388785>,
+                    <3510000 426168>;
+                /* this is an array of temperature in descending order, and 
+                * as the number of  ocv-capacity-table-X tables corresponds to
+                * ocv-capacity-celsius[X] temperature
+                */
                 ocv-capacity-celsius = <250>;
                 ocv-capacity-table-0 = 
                 	    <4178000 100>,
@@ -55,10 +98,13 @@
                         <3405000 2>,
                         <3352000 1>,
                         <3300000 0>;
+
+                /* generic LiIon resistance change over temperature */        
+                /* Temperature [0.1 C] Percentage of resistance     */        
                 resistance-temp-table = 
                      <500 45>,
-                     <400 50>,
-                     <350 60>,
+                     <400 60>,
+                     <350 100>,
                      <150 100>,
                      <100 150>,
                      < 0  200>;
@@ -88,9 +134,9 @@
 
     __overrides__ {
         max_charge_uA = <&BAT1>, "constant-charge-current-max-microamp:0";
+        max_charge_uV = <&BAT1>, "constant-charge-voltage-max-microvolt:0";
         pre_charge_uA = <&BAT1>, "precharge-current-microamp:0";
         charge_term_uA = <&BAT1>, "charge-term-current-microamp:0";
         bat_capacity_uAh = <&BAT1>, "charge-full-design-microamp-hours:0";
-        r_int_uohms = <&BAT1>, "factory-internal-resistance-micro-ohms:0";
     };
 };
