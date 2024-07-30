@@ -1,2 +1,2 @@
 #!/bin/bash
-rm -f /boot/overlays/mrhat-battery.dtbo
+rm -f /boot/overlays/mrhat-battery-simple.dtbo
